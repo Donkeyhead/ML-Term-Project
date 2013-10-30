@@ -35,3 +35,38 @@ for i=1:length(parties)
     party_members_elected{i} = intersect(party_members{i}, elected);
     party_members_not_elected{i} = intersect(party_members{i}, not_elected);
 end
+
+%% partition data
+
+% z = find(cellfun(@iscomment, feature_names))
+
+idx_misc = [1:48 , 170:171];
+idx_questions = 49:169;
+idx_comments = 172:199;
+
+% only misc stuff
+feature_misc = feature_names(idx_misc);
+% only questions
+feature_questions = feature_names(idx_questions);
+% only comments
+feature_comments = feature_names(idx_comments);
+
+data_misc = data(idx_misc);
+data_questions = data(idx_questions);
+data_comments = data(idx_comments);
+
+%% Data descriptive values
+
+
+min_data = min(data);
+min_misc = min_data(idx_misc);
+min_questions = min_data(idx_questions);
+min_comments = min_data(idx_comments);
+
+max_data = max(data);
+max_misc = max_data(idx_misc);
+max_questions = max_data(idx_questions);
+max_comments = max_data(idx_comments);
+
+data
+
