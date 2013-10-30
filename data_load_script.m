@@ -51,12 +51,18 @@ feature_questions = feature_names(idx_questions);
 % only comments
 feature_comments = feature_names(idx_comments);
 
-data_misc = data(idx_misc);
-data_questions = data(idx_questions);
-data_comments = data(idx_comments);
+data_misc = data(:, idx_misc);
+data_questions = data(:, idx_questions);
+data_comments = data(:, idx_comments);
 
 %% Data descriptive values
 
+%Calculate maximum values
+
+dataN = size(data, 1);
+
+partiesN = cellfun(@(x) size(x, 1), party_members);
+partiesP = partiesN./dataN;
 
 min_data = min(data);
 min_misc = min_data(idx_misc);
@@ -68,5 +74,39 @@ max_misc = max_data(idx_misc);
 max_questions = max_data(idx_questions);
 max_comments = max_data(idx_comments);
 
+%Calculate data correlations
 
+data_correlation = corr(data);
+data_questions_correlation = corr(data_questions);
+
+party_members_correlations = cell(length(parties), 1);
+for i=1:length(parties)
+    party_members_correlations{i} = corr(data_questions(party_members{i}, :));
+    %subplot(5,4,i);
+    %imagesc(party_members_correlations{i});
+end
+
+% Calculate data covariances
+
+data_covariance = cov(data);
+data_questions_covariance = cov(data_questions);
+
+party_members_covariances = cell(length(parties), 1);
+for i=1:length(parties)
+    party_members_covariances{i} = cov(data_questions(party_members{i}, :));
+    %subplot(5,4,i);
+    %imagesc(party_members_covariances{i});
+end
+
+% Calculate data means
+
+data_means = mean(data);
+data_questions_means = mean(data_questions);
+
+party_members_means = cell(length(parties), 1);
+for i=1:length(parties)
+    party_members_means{i} = mean(data_questions(party_members{i}, :));
+    %subplot(5,4,i);
+    %imagesc(party_members_means{i});
+end
 
