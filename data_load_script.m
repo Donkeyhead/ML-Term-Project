@@ -93,11 +93,14 @@ data_questions_covariance = cov(data_questions);
 
 party_members_covariances = cell(length(parties), 1);
 for i=1:length(parties)
-    party_members_covariances{i} = cov(data_questions(party_members{i}, :));
+    % Cheat by renormalizing without knowing if this is even right
+    party_members_covariances{i} = cov(zscore(data_questions(party_members{i}, :)));
     %subplot(5,4,i);
     %imagesc(party_members_covariances{i});
 end
 
+for i=1:lenght(parties)
+    
 % Calculate data means
 
 data_means = mean(data);
