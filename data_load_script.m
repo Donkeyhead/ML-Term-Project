@@ -68,5 +68,5 @@ max_misc = max_data(idx_misc);
 max_questions = max_data(idx_questions);
 max_comments = max_data(idx_comments);
 
-data
+
 
