@@ -27,7 +27,7 @@ function [rtrn] = create_model_PCA_mvn(data, data_labels)
         for d = 1:degree_of_projections
             new_d = score(:,1:d);
 
-            % Which way is this supposed to be multiplied?
+            % Which way is thisi even supposed to be multiplied?
             class_t = classify(training_set*coeff(:, 1:d), new_d, ... 
             training_labels);
             class_v = classify(validation_set*coeff(:, 1:d), new_d, ...
@@ -44,10 +44,10 @@ function [rtrn] = create_model_PCA_mvn(data, data_labels)
         end
     end
     errors = errors/K
-    %plot([1:degree_of_projections], errors(:,1), 'ro');
-    %hold on
-    %plot([1:degree_of_projections], errors(:,2), 'bo');
+    plot([1:degree_of_projections], errors(:,1), 'ro');
+    hold on
+    plot([1:degree_of_projections], errors(:,2), 'bo');
 
-    %plot([1:degree_of_projections], (errors(:,2) + errors(:,1)) / 2, 'go');
-    %hold off
+    plot([1:degree_of_projections], (errors(:,2) + errors(:,1)) / 2, 'go');
+    hold off
 end
