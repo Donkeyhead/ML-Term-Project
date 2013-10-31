@@ -2,6 +2,7 @@
 
 % First add function for loading the data to path
 addpath('code');
+addpath('models');
 fname = 'data/data_vk_training.csv';
 
 [target_variables, target_names, data, feature_names] = load_HS_vaalikone(fname);
@@ -98,8 +99,6 @@ for i=1:length(parties)
     %subplot(5,4,i);
     %imagesc(party_members_covariances{i});
 end
-
-for i=1:lenght(parties)
     
 % Calculate data means
 
