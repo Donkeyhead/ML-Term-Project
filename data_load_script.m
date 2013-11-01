@@ -9,6 +9,14 @@ ftest = 'data/data_vk_test_full.csv';
 [target_variables, target_names, data, feature_names] = load_HS_vaalikone(fname);
 [test_target_variables, test_target_names, test_data, test_feature_names] = load_HS_vaalikone(ftest);
 
+% Count the different amount of different answers for each different
+% observation
+
+data_choices = [];
+for d = data
+    data_choices = [data_choices, count_choices(d)];
+end
+
 
 %%
 
@@ -38,6 +46,15 @@ party_members_not_elected = cell(length(parties), 1);
 for i=1:length(parties)
     party_members_elected{i} = intersect(party_members{i}, elected);
     party_members_not_elected{i} = intersect(party_members{i}, not_elected);
+end
+
+% Calculate mean and variance of the candidates ages
+
+party_members_age_mean = [1:length(parties)];
+party_members_age_variance = [1:length(parties)];
+for i=1:length(parties)
+    party_members_age_mean(i) = mean(data(party_members{i}, 42));
+    party_members_age_variance(i) = var(data(party_members{i}, 42));
 end
 
 %% partition data
@@ -129,3 +146,10 @@ for i=1:length(parties)
     %imagesc(party_members_means{i});
 end
 
+% Calculate the amount of current members that are congressmen
+
+party_members_congressmen = [1:length(parties)];
+for i=1:length(parties)
+    party_members_congressmen(i) = size(find(data(party_members{i},45) == ...
+    max_data(45)), 1) / size(party_members{i}, 1);
+end
