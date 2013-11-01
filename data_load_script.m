@@ -69,6 +69,10 @@ test_data_misc = test_data(:, idx_misc);
 test_data_questions = test_data(:, idx_questions);
 test_data_comments = test_data(:, idx_comments);
 
+%% Some renaming for convenience
+
+data_target_labels = target_variables(:,2);
+
 %% Data descriptive values
 
 %Calculate maximum values
