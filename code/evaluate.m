@@ -73,7 +73,7 @@ function [results]=evaluate(prediction,truth)
       rownames = cell(2+length(levs_truth),1);rownames{1}='score_mean';rownames{2}='confusion_mean';
       for ind = 3:2+length(levs_truth), rownames{ind} = num2str(levs_truth(ind-2)); end
     end
-    colnames=['Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'];
+    colnames={'Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'};
     results{v,1}=rownames;
     results{v,2}=result; 
     results{v,3}=colnames;

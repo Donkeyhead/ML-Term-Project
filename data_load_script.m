@@ -4,8 +4,11 @@
 addpath('code');
 addpath('models');
 fname = 'data/data_vk_training.csv';
+ftest = 'data/data_vk_test_full.csv';
 
 [target_variables, target_names, data, feature_names] = load_HS_vaalikone(fname);
+[test_target_variables, test_target_names, test_data, test_feature_names] = load_HS_vaalikone(ftest);
+
 
 %%
 
@@ -45,6 +48,9 @@ idx_misc = [1:48 , 170:171];
 idx_questions = 49:169;
 idx_comments = 172:199;
 
+% training
+% --------
+
 % only misc stuff
 feature_misc = feature_names(idx_misc);
 % only questions
@@ -55,6 +61,13 @@ feature_comments = feature_names(idx_comments);
 data_misc = data(:, idx_misc);
 data_questions = data(:, idx_questions);
 data_comments = data(:, idx_comments);
+
+% test
+% ----
+
+test_data_misc = test_data(:, idx_misc);
+test_data_questions = test_data(:, idx_questions);
+test_data_comments = test_data(:, idx_comments);
 
 %% Data descriptive values
 
