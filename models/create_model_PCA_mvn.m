@@ -33,11 +33,9 @@ function [rtrn] = create_model_PCA_mvn(data, data_labels)
             class_v = classify(validation_set*coeff(:, 1:d), new_d, ...
             training_labels);
             
-            t_error = sum(strcmp(class_t, training_labels) == 0) / ...
-            size(training_set, 1);
+            t_error = sum(strcmp(class_t, training_labels) == 0);
 
-            v_error = sum(strcmp(class_v, validation_labels) == 0) / ...
-            size(validation_set, 1);
+            v_error = sum(strcmp(class_v, validation_labels) == 0);
 
             errors(d, 1) = t_error;% + d / degree_of_projections * 0.5;
             errors(d, 2) = v_error;% + d / degree_of_projections * 0.5;
