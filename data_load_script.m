@@ -34,6 +34,14 @@ for i=1:length(parties)
     party_members{i} = find(strcmp(target_variables(:, 2), parties{i}));
 end
 
+test_party_members = cell(length(parties), 1);
+
+% Loop over parties in test data
+for i=1:length(parties)
+    % Select all rows that belong to a particular party
+    test_party_members{i} = find(strcmp(test_target_variables(:, 2), parties{i}));
+end
+
 %% elected for each party
 
 % Select samples (election candidates) by whether they were elected 
@@ -89,6 +97,7 @@ test_data_comments = test_data(:, idx_comments);
 %% Some renaming for convenience
 
 data_target_labels = target_variables(:,2);
+test_data_target_labels = test_target_variables(:,2);
 
 %% Data descriptive values
 
