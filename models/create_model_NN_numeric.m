@@ -7,6 +7,10 @@ function [net, tr] = create_model_NN_numeric(data, data_labels, numLayers)
 nn_data = data';
 nn_targets = full(ind2vec(data_labels'));
 
+%whos nn_data
+%whos nn_targets
+%nn_targets
+
 net = patternnet(10);
 net.numLayers = numLayers;
 [net, tr] = train(net, nn_data, nn_targets);

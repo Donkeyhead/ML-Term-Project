@@ -1,5 +1,7 @@
 % MLPB 2013 term project classification evaluation
 %
+% Updated: 1.11.13 - Some classes may be missing in the prediction. Create a square confusion matrix regardless.
+%
 % Data: election candidates
 %
 % Classification task:
@@ -22,42 +24,33 @@
 %' truth Table of true labels, same dimensions as prediction
 %' 
 function [results]=evaluate(prediction,truth)
-  % check dims
-  %if (sum(size(prediction)==size(truth))==2),error('myApp:DimensionCheck', 'shape mismatch, prediction and truth.'); end
-  % check colnames
-  %if(!all(colnames(prediction) == colnames(truth)))
-  %  stop("Variable mismatch, prediction and truth.")
-  %end
-  %
-  %varnames = colnames(prediction);
-  %
   results = cell(size(truth,2),3);
   % loop over variables (columns)
   for v=1:size(truth,2) 
     vals_pred = prediction(:,v);
     vals_truth = truth(:,v);
-    % make sure we're dealing with factors
-    % if(is.factor(vals_pred)), vals_pred = vals_pred; else vals_pred = factor(vals_pred); end
-    % if(is.factor(vals_truth)), vals_truth = vals_truth; else vals_truth = factor(vals_truth); end
-    % check levels match
-    levs_pred = unique(vals_pred);levs_truth = unique(vals_truth);
-    %if(!all(levs_pred == levs_truth)) stop("Level mismatch in column ", v)
-    nlevels = length(levs_pred);
-    % confusion matrix
-    A = crosstab(vals_pred, vals_truth);
+    
+    levs = union(vals_pred, vals_truth);
+    nlevels = length(levs);
+
+    % Confusion matrix
+    A = zeros(nlevels);
+    for i=1:nlevels % Go through all levels of the prediction vector.
+        for j=1:nlevels % Go through all levels of the ground-truth vector.
+            A(i,j) = sum(vals_pred==levs(i) & vals_truth==levs(j)); % Compute the value(j,i) to the confusion matrix.
+        end
+    end
     % Used format for binary classification:
     %  TN, FN
     %  FP, TP
     %
     % If only binary classification
     if(nlevels == 2) 
-      %if(nlevels == 1) % fix for when we predict only one value
-      %    FIX = zeros(2,2);
-      %    FIX(:,1) = A;
-      %    A = FIX;
-      %end
       result = evaluate_binary(A);
-      rownames = cell(length(levs_truth),1);for ind = 1:length(levs_truth), rownames{ind} = num2str(levs_truth(ind)); end
+      rownames = cell(length(levs),1);
+      for ind=1:length(levs)
+        rownames{ind} = num2str(levs(ind));
+      end
     else
       % multi-label. We average over binary classifications
       result = zeros(nlevels,6); Bave = zeros(2,2);
@@ -74,14 +67,15 @@ function [results]=evaluate(prediction,truth)
       % average over the classes. Using average confusion matrix
       ave_result = evaluate_binary(Bave / nlevels);
       % and value averages
-      %whos ave_result result
-      %z = mean(result);
-      %whos z
       result = [mean(result); ave_result; result];
-      rownames = cell(2+length(levs_truth),1);rownames{1}='score_mean';rownames{2}='confusion_mean';
-      for ind = 3:2+length(levs_truth), rownames{ind} = num2str(levs_truth(ind-2)); end
+      rownames = cell(2+length(levs),1);
+      rownames{1}='score_mean';
+      rownames{2}='confusion_mean';
+      for ind=3:2+length(levs)
+        rownames{ind} = num2str(levs(ind-2));
+      end
     end
-    colnames={'Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'};
+    colnames=['Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'];
     results{v,1}=rownames;
     results{v,2}=result; 
     results{v,3}=colnames;
@@ -90,7 +84,12 @@ function [results]=evaluate(prediction,truth)
 %%%%%%%%%%
 function [result]=evaluate_binary(A)
   % see http://en.wikipedia.org/wiki/Sensitivity_and_specificity%Worked_example
-  if(sum(A(2,:))), pos_pred_value = A(2,2)/sum(A(2,:));  else pos_pred_value = 0;   end% same as precision
+  % same as precision
+  if (sum(A(2,:)))
+    pos_pred_value = A(2,2)/sum(A(2,:));
+  else
+    pos_pred_value = 0;
+  end
   sensitivity = A(2,2)/sum(A(:,2)); % same as recall
   accuracy = (A(1,1)+A(2,2))/sum(sum(A));
   false_pos_rate = A(2,1)/(A(2,1)+A(1,1));
@@ -98,7 +97,11 @@ function [result]=evaluate_binary(A)
   if(isnan(Fscore)),  Fscore = 0; end % we decided this.
   % phi score aka Matthews correlation coefficient
   denom = sqrt(sum(A,1)*sum(A,2));
-  if(denom), phi_score = (A(2,2)*A(1,1) - A(1,2)*A(2,1))/denom; else phi_score = 0; end
+  if (denom)
+    phi_score = (A(2,2)*A(1,1) - A(1,2)*A(2,1))/denom;
+  else
+    phi_score = 0;
+  end
   % keep all
   result=[Fscore,phi_score,accuracy,false_pos_rate,sensitivity,pos_pred_value];
 %%%%%%%%%%%%%%%%%%%
