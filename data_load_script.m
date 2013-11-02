@@ -165,6 +165,9 @@ for i=1:length(parties)
     %subplot(5,4,i);
     %imagesc(party_members_means{i});
 end
+c{1} = 1;
+attributes_grouped = group_questions(c, data, min_data, 1, 2);
+clear c;
 
 % Calculate the amount of current members that are congressmen
 
