@@ -34,6 +34,7 @@ for i=1:length(parties)
     party_members{i} = find(strcmp(target_variables(:, 2), parties{i}));
 end
 
+
 test_party_members = cell(length(parties), 1);
 
 % Loop over parties in test data
@@ -98,6 +99,16 @@ test_data_comments = test_data(:, idx_comments);
 
 data_target_labels = target_variables(:,2);
 test_data_target_labels = test_target_variables(:,2);
+
+party_specific_labels = zeros(size(data_target_labels, 1), size(parties,1));
+for p = 1:size(parties,1)
+    party_specific_labels(party_members{p}, p) = 1;
+end
+
+test_party_specific_labels = zeros(size(test_data_target_labels, 1), size(parties,1));
+for p = 1:size(parties,1)
+    test_party_specific_labels(test_party_members{p}, p) = 1;
+end
 
 %% Data descriptive values
 
