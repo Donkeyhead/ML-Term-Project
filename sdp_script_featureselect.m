@@ -5,10 +5,16 @@ bin_prediction = cell(length(parties), 1);
 bin_nets = cell(length(parties), 1);
 maxFScores = zeros(1, length(parties));
 
+feature_idxs_for_party = cell(length(parties), 1);
+
+for i = 1:length(parties)
+    feature_idxs_for_party{i} = rankfeatures(data_questions', party_specific_labels(:,party_to_idx(parties{i})), 'CRITERION', 'ttest', 'NUMBER', 15);
+end
+
 for i = 1:length(parties)
 
-used_data = data_questions;
-used_test_data = test_data_questions;
+used_data = data_questions(:,feature_idxs_for_party{i});
+used_test_data = test_data_questions(:,feature_idxs_for_party{i});
 %chosen_party = 'KA';
 chosen_party = parties{i};
 
