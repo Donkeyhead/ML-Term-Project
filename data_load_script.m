@@ -110,6 +110,9 @@ for p = 1:size(parties,1)
     test_party_specific_labels(test_party_members{p}, p) = 1;
 end
 
+data_target_elected = str2double(target_variables(:,1));
+test_data_target_elected = str2double(test_target_variables(:,1));
+
 %% Data descriptive values
 
 %Calculate maximum values
