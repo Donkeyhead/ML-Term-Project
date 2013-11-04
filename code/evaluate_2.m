@@ -23,7 +23,7 @@
 %' prediction Table of predictions, named data.frame
 %' truth Table of true labels, same dimensions as prediction
 %' 
-function [results]=evaluate(prediction,truth)
+function [results]=evaluate_2(prediction,truth)
   results = cell(size(truth,2),3);
   % loop over variables (columns)
   for v=1:size(truth,2) 
@@ -75,7 +75,7 @@ function [results]=evaluate(prediction,truth)
         rownames{ind} = num2str(levs(ind-2));
       end
     end
-    colnames=['Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'];
+    colnames={'Fscore','phi_score','accuracy','false_pos_rate','sensitivity','pos_pred_value'};
     results{v,1}=rownames;
     results{v,2}=result; 
     results{v,3}=colnames;
