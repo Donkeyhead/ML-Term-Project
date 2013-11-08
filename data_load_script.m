@@ -168,8 +168,14 @@ for i=1:length(parties)
     %subplot(5,4,i);
     %imagesc(party_members_means{i});
 end
+
+% Group the data according question groups
 c{1} = 1;
 attributes_grouped = group_questions(c, data, min_data, 1, 2);
+
+% Compress the data according to the question groups using PCA with just the
+% main component (Maybe stupid)
+data_reduced = reduce_dimensions(data, attributes_grouped);
 clear c;
 
 % Calculate the amount of current members that are congressmen
@@ -179,3 +185,4 @@ for i=1:length(parties)
     party_members_congressmen(i) = size(find(data(party_members{i},45) == ...
     max_data(45)), 1) / size(party_members{i}, 1);
 end
+
