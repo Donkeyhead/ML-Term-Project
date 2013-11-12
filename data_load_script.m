@@ -57,6 +57,18 @@ for i=1:length(parties)
     party_members_not_elected{i} = intersect(party_members{i}, not_elected);
 end
 
+% Select samples (election candidates) by whether they were elected 
+test_elected = find(strcmp(test_target_variables(:,1), '1'));
+test_not_elected = find(strcmp(test_target_variables(:,1), '0'));
+
+test_party_members_elected = cell(length(parties), 1);
+test_party_members_not_elected = cell(length(parties), 1);
+
+for i=1:length(parties)
+    test_party_members_elected{i} = intersect(test_party_members{i}, test_elected);
+    test_party_members_not_elected{i} = intersect(test_party_members{i}, test_not_elected);
+end
+
 % Calculate mean and variance of the candidates ages
 
 party_members_age_mean = [1:length(parties)];
