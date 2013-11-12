@@ -78,7 +78,7 @@ pX = cell(length(parties), 1);
 pX_projection = cell(length(parties), 1);
 pX_explained = cell(length(parties), 1);
 
-for i=1:length(parties)
+for i=1:11%length(parties)
     
     i
     
@@ -139,7 +139,7 @@ for i=1:length(parties)
     
     plot3(training_set(elected_idxs,1), ...
          training_set(elected_idxs,2), ...
-         training_set(elected_idxs,2), 'g+');
+         training_set(elected_idxs,3), 'g+');
     
     % Hax
     test_training_target_labels = zeros(length(test_party_members{i}), 1);
@@ -151,8 +151,12 @@ for i=1:length(parties)
     plotsample = sample(test_party_members{i},:);
     plot3(plotsample(test_elected_idxs,1), ...
           plotsample(test_elected_idxs,2), ...
-          plotsample(test_elected_idxs,2), 'bo');
+          plotsample(test_elected_idxs,3), 'bo');
     % End Hax
+    
+    xlabel('x');
+    ylabel('y');
+    zlabel('z');
     
     hold off;
 
