@@ -1,8 +1,4 @@
-function [mHandle] = create_pca_classify_model(training_data, data_labels, classes)
-    whos data_labels
-    whos classes
-    class_to_num = containers.Map(classes, 1:length(classes));
-    labels = cellfun(@(x) class_to_num(x), data_labels);
+function [mHandle] = create_pca_classify_model(training_data, training_labels)
 
     mHandle = @model;
     
@@ -19,6 +15,7 @@ function [mHandle] = create_pca_classify_model(training_data, data_labels, class
             end
             old_sum = new_sum;
         end
-        pred = classify(test_data * coeff(:,1:deg), score(:, 1:deg), labels);        
+        deg
+        pred = classify(test_data * coeff(:,1:deg), score(:, 1:deg), training_labels);
     end
 end
