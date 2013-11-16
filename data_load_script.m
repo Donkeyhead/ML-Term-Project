@@ -1,4 +1,5 @@
-%% Project work
+%election
+% Project work
 
 % First add function for loading the data to path
 addpath('code');
@@ -38,13 +39,13 @@ end
 
 % Select samples (election candidates) by whether they were elected 
 
-election = cell(2,1)
+election = cell(2,1);
 
 elected = find(strcmp(target_variables(:,1), '1'));
 not_elected = find(strcmp(target_variables(:,1), '0'));
 
 election{1} = elected;
-election{2} = not_elected
+election{2} = not_elected;
 
 party_members_elected = cell(length(parties), 1);
 party_members_not_elected = cell(length(parties), 1);
