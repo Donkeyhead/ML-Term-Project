@@ -14,7 +14,7 @@ load_HS_vaalikone('data/data_vk_test_full.csv');
 % but is NOT the same as using mvnpdf:s
 
 cls = classify(test_data * coeff(:, 1:d), score(:, 1:d), ...
-target_variables(:,select));
+target_variables(:,select), 'diaglinear');
 
 cls_v = cellfun(@(x) party_to_idx(x), cls);
 truth_v = cellfun(@(x) party_to_idx(x), test_target_variables(:,select));

@@ -78,7 +78,7 @@ pX = cell(length(parties), 1);
 pX_projection = cell(length(parties), 1);
 pX_explained = cell(length(parties), 1);
 
-for i=1:11%length(parties)
+for i=1:length(parties)
     
     i
     

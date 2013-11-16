@@ -19,58 +19,39 @@ kansanedustaja = test_data(:,45) > 0;
 p1 = w1*kansanedustaja;
 
 
-%% P2 _ (% size of party in given region) kannatusprosentti
+%% P2 _ (% size of party in given region)
 
 p2 = cell(length(parties), 1);
 
 % TODO... which features indicate this...
 % calculate for each region, for each party
-% 
-% vaalipiirit = 1:14;
-% 
-% n_total_elected = length(elected);
-% 
-% for i=vaalipiirit
-%     % TODO: TEST IF WORKS
-%     
-%     elected_idxs = find(data(:,i) >= 0);
-%     
-% end
-
 
 
 %% PC _ Current (somewhat bad) predictions for party membership
-% We need the probabilities of candidate belonging to each party
-%
-% This is a multivariate classification problem
-%
-% We are using flat prior in classify(...)
-%
-% TODO: USE NAIVE BAYES
+% flat prior in classify(...)
+
+% using full data
+[coeff, score] = pca(data);
 
 d = 8; % magic number based on k-fold check
 
-target_memberships = party_to_idx_fun(data_target_labels);
+targets_memberships = party_to_idx_fun(data_target_labels);
 
-% predict_classify classify() order: training, group, sample
-[memberships, memberships_posterior] = ...
-    predict_classify(data, target_memberships, test_data, d);
+memberships = classify(test_data * coeff(:, 1:d), score(:, 1:d), ...
+    targets_memberships);
 
 
 %% PX _ Probability of member being chosen based on questions, given party
-% We need the probabilities of candidate belonging to each party
+% Flat prior in classify(...)
+
+% TODO HOX: HMM JOILLAIN PUOLUEILLA EI OO KETÄÄN VALITTU...
+
+% LEFT HERE: JOSTAIN SYYSTÄ REMOVE LINEAR DEPS -> covariace matrix ...
+% edelleen riippuva ja roikkuva
+% __POOLED__ covariance matrix...??????????
 %
-% This is a binary classification problem
-%
-% What we could try:
-% - mvnpdf
-% - nn
-% - svm
-%
-% We remove linear dependencies from the features
-% also TODO: do we reduce feature dimensions so
-% # samples > # features? Eg. with feature selection or PCA.
-%
+% SOLUTION: johtuu siitä että samplejen määrä < featurejen määrä
+% FOR NOW: take pca, project to <samplejen määrä> dimensions
 
 % not this training_target_labels = party_to_idx_fun(data_target_labels);
 
@@ -98,29 +79,25 @@ for i=1:length(parties)
     sample = test_data_questions(:,saved_col_idxs);
     
     whos training_set training_target_labels sample
- 
-% i = 3:
-%  sample                      526x110            462880  double              
-%  training_set                 89x110             78320  double              
-%  training_target_labels       89x1                 712  double        
     
     % FIX BEFORE k-fold etc.: project to pc-vectors
     % reduces number of features to equal number of samples
-%    [coeff, score] = pca(training_set);
-%    deg = size(training_set, 1) - 1; % size(,1) = #rows
-%    training_set = score(:, 1:deg);
-%    sample = sample * coeff(:, 1:deg);
-%    pX_projection{i} = cell(length(parties), 1);
+    [coeff, score] = pca(training_set);
+    deg = size(training_set, 1) - 1; % size(,1) = #rows
+    training_set = score(:, 1:deg);
+    sample = sample * coeff(:, 1:deg);
+    pX_projection{i} = cell(length(parties), 1);
     % end FIX
     
-%    whos training_set training_target_labels sample
-
+    whos training_set training_target_labels sample
     
-
+    % predict_classify classify() order: training, group, sample
+    
+    % NOTE WE USE LDA HERE... NOT MVNPDF
     [~, posterior] = predict_classify(training_set, ...
         training_target_labels, sample, 0);
     
-    pX{i} = posterior;
+    pX{i} = posterior; % posteriors for members in test_data_questions
 end
 
 %% P5
