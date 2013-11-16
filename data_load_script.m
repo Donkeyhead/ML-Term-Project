@@ -9,15 +9,6 @@ ftest = 'data/data_vk_test_full.csv';
 [target_variables, target_names, data, feature_names] = load_HS_vaalikone(fname);
 [test_target_variables, test_target_names, test_data, test_feature_names] = load_HS_vaalikone(ftest);
 
-% Count the different amount of different answers for each different
-% observation
-
-data_choices = [];
-for d = data
-    data_choices = [data_choices, count_choices(d)];
-end
-
-
 %%
 
 % First find names of different parties
@@ -46,8 +37,14 @@ end
 %% elected for each party
 
 % Select samples (election candidates) by whether they were elected 
+
+election = cell(2,1)
+
 elected = find(strcmp(target_variables(:,1), '1'));
 not_elected = find(strcmp(target_variables(:,1), '0'));
+
+election{1} = elected;
+election{2} = not_elected
 
 party_members_elected = cell(length(parties), 1);
 party_members_not_elected = cell(length(parties), 1);
@@ -189,6 +186,19 @@ attributes_grouped = group_questions(c, data, min_data, 1, 2);
 % main component (Maybe stupid)
 data_reduced = reduce_dimensions(data, attributes_grouped);
 clear c;
+
+% Count the different amount of different answers for each different
+% observation
+
+data_choices = [];
+% choice_to_odds = containers.Map(parties, 1:length(parties));
+for d = 1:size(data,2)
+    data_choices = [data_choices, count_choices(data(:,d))];
+end
+
+data_odds = calc_data_odds(data);
+
+data_odds_reduced = reduce_dimensions(data_odds, attributes_grouped);
 
 % Calculate the amount of current members that are congressmen
 
