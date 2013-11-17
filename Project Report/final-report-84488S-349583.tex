@@ -15,10 +15,10 @@
 \title{How much can be explained by Voting Advice Application data}
 \author{
         Iiro Tähkä (84488S)\\ 
-       {\tt iiro.tahka@aalto.fi}
+       {\tt \small iiro.tahka@aalto.fi}
         \and          
         Unto Kuuranne (349583)\\ 
-       {\tt unto.kuuranne@aalto.fi}
+       {\tt \small unto.kuuranne@aalto.fi}
 }
 
 \begin{document}
@@ -26,7 +26,7 @@
 \maketitle
 
 \begin{abstract}
-Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah wow! blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah such abstract  blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+The main goal of this paper is to provide a data point on how relevant Voting Advice Application data is actually. We highly suspect that the questions posed in the VAAs are not fully explanatory for party membership or election outcomes, other explanatory variables surely exist. The exploration of predictive power of this dataset is done by employing a multitude of established machine learning methods, including but not limited to Naive Bayes, LDA, Classification Trees and Pattern Recognition Networks. Haphazard approaches are also attempted. The search for a predictors for election outcomes failed miserably, but the party membership predictors proved more fruitful.
 \end{abstract}
 
 
@@ -69,6 +69,14 @@ The Naive bayes classifier is based on applying the Bayes’ theorem with strong
 When compared to the number of features, the number of samples is not that large. Thus Naive Bayes assumption is warranted.
 
 \subsubsection{Tuning Gamma and Delta}
+
+Gamma is a parameter for regularizing the correlation matrix of predictors.
+
+Delta is the threshold for linear coefficients, tuning it eliminates predictors which have magnitude smaller than delta.
+
+By tuning the Gamma parameter the Naive Bayes assumption is no longer valid and MVNPDFs are used.
+
+We used the same methods as with Naive Bayes but tuned the Gamma and Delta parameters using cvshrink. \footnote{http://www.mathworks.se/help/stats/classificationdiscriminant.cvshrink.html}
 
 \subsection{Classification Trees}
 
@@ -148,7 +156,6 @@ The experiment was similar to the Naive Bayes experiment, but this time gamma an
 \footnote{http://www.mathworks.se/help/stats/classificationdiscriminant.cvshrink.html}
 
 K-fold was run with K=N/30 or K=N/25, gamma had 10 possible values in [0,1] and delta had 40 possible values, as given to cvshrink.
-
 
 As dataset the {\bf full-data} was used.
 
@@ -265,7 +272,60 @@ It seems doubtful that PCA provides much improvement in scores, but it helps to 
 
 Multiple hybrid models were tested. The results however were never better than the “fallback classifier”. For example Naive Bayes in case of using In-Class-or-Not style pattern recognition nets results in F-score of 0.4502 in the test set, while the untuned Naive Bayes had 0.4696. 
 
-\section{Discussion}
+\begin{table}
+	\caption{Hybrid method F-score comparisons}
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    Party & Result   & Untuned naive bayes & Pattern net \\ \hline
+    IPU   & 0.4000   & 0.4615              & 0.1250      \\ \hline
+    KA    & 0        & 0                   & 0           \\ \hline
+    KD    & 0.5905   & 0.6022              & 0.6265      \\ \hline
+    KESK  & 0.5882   & 0.6562              & 0.5882      \\ \hline
+    KOK   & 0.7669   & 0.7934              & 0.7813      \\ \hline
+    KTP   & 0        & 0                   & 0           \\ \hline
+    M2011 & 0.5000   & 0.5000              & 0.5455      \\ \hline
+    PIR   & 0.6667   & 0.7059              & 0.7059      \\ \hline
+    PS    & 0.8070   & 0.7966              & 0.7788      \\ \hline
+    RKP   & 0.3529   & 0.5366              & 0.5625      \\ \hline
+    SDP   & 0.7067   & 0.7164              & 0.6299      \\ \hline
+    SEN   & 0        & 0                   & 0           \\ \hline
+    SKP   & 0.5902   & 0.5185              & 0.6071      \\ \hline
+    STP   & 0        & 0                   & 0           \\ \hline
+    VAS   & 0.6286   & 0.6496              & 0.6306      \\ \hline
+    VIHR  & 0.8333   & 0.8455              & 0.8103      \\ \hline
+    VP    & 0.2222   & 0.2000              & 0.1333      \\ \hline
+    \end{tabular}
+\end{table}
+
+It is notable that the tuned Naive Bayes for example got better F-scores for most parties than the pattern recognition nets, thus this particular method was silly in retrospect.
+
+\section{Conclusions}
+
+\begin{enumerate}
+\item  Predicting election results is a non-trivial problem: in the end we just gave up on trying to do better predictions than the ‘Kansanedustaja’ ie. ‘Is the person currently a member of the parliament’, the LDA method for example got F-score 0.4423 on the test set, while the ‘Currently a member of parliament’ prediction gives 0.477. We thus discontinued this search and concentrated on finding models for the party membership predictions.
+
+
+\item  Predicting the party of the candidate is doable up to a point.
+
+
+\item  The data doesn’t contain all the necessary information for predicting with high success. Of course better methods would also help if such exist.
+
+\item Dividing the training set to misc, questions and comments was not a fruitful avenue in the end, we switched to just using the full dataset.
+\end{enumerate}
+
+\begin{table}
+	\caption{Comparisons of all the methods used}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    model                        & Election F-score & Party F-score \\ \hline
+    Classification Tree ensemble & -                & 0.4101        \\ \hline
+    LDA                          & 0.4423           & 0.4911        \\ \hline
+    Basic Naive Bayes            & -                & 0.4829        \\ \hline
+    Tuned Bayes                  & -                & 0.4795        \\ \hline
+    Kansanedustaja (Dummy model) & 0.477            & -             \\ \hline
+    \end{tabular}
+\end{table}
+
 \section{Reference List}
 \bibliographystyle{abbrv}
 \bibliography{references}
