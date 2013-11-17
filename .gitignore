@@ -1,4 +1,10 @@
 *~
 *.swp
 *.swo
+*.eps
+*.bbl
+*.aux
+*.blg
+*.log
+*.out
 
