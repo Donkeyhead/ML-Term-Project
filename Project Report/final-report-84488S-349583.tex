@@ -246,23 +246,23 @@ Tuning the Gamma and Delta didn’t result in much better results.
 
 \begin{figure}
 \begin{center}
-	\caption{Pleisholderi}
+	\caption{PCA degrees from 15 to 100, best F-score is at degree 91.}
 	{\includegraphics[scale=0.5,angle=0]{./img/bayes_gamma_pca1.pdf}}
 	\label{fig:bayesGamma1}
 \end{center}
 \end{figure}
 
-In PCA degrees of projection from 15 to 100 principal components the best degree was 91, with delta of 0.2637, gamma of 0.2222 and F-score 0.52453. The resulting F-score in the test set was 0.4795.
+In PCA degrees of projection from 15 to 100 principal components the best degree was 91, with delta of 0.2637, gamma of 0.2222 and F-score 0.52453. The resulting F-score in the test set was 0.4795, see figure~\ref{fig:bayesGamma1}.
 
 \begin{figure}
 \begin{center}
-	\caption{Pleisholderi}
+	\caption{PCA degrees from 100 to 180, best F-score is at degree 140.}
 	{\includegraphics[scale=0.5,angle=0]{./img/bayes_gamma_pca2.pdf}}
-	\label{fig:BayesGamma21}
+	\label{fig:BayesGamma2}
 \end{center}
 \end{figure}
 
-In PCA degrees of projection from 100 to 180 principal components the best degree was 140, with delta of 1.654113e-01, gamma of 4.444444e-01 with Matlab whining about those, and F-score 0.53491, better than the previous without tuning.
+In PCA degrees of projection from 100 to 180 principal components the best degree was 140, with delta of 1.654113e-01, gamma of 4.444444e-01 with Matlab whining about those, and F-score 0.53491, better than the previous without tuning, see figure~\ref{fig:bayesGamma2}.
 
 The resulting F-score in the test set was 0.4851.
 
@@ -324,6 +324,7 @@ It is notable that the tuned Naive Bayes for example got better F-scores for mos
     Tuned Bayes                  & -                & 0.4795        \\ \hline
     Kansanedustaja (Dummy model) & 0.477            & -             \\ \hline
     \end{tabular}
+    \label{AllMethods}
 \end{table}
 
 \section{Reference List}
